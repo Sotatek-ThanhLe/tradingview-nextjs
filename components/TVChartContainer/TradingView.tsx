@@ -6,13 +6,13 @@ import {
   version,
   TradingTerminalWidgetOptions,
   IChartingLibraryWidget,
-} from '../charting_library/charting_library.min';
+} from './charting_library/charting_library.min';
 import {
   HistoryCallback,
   LibrarySymbolInfo,
   ResolutionString,
   ResolveCallback,
-} from '../charting_library/datafeed-api';
+} from './charting_library/datafeed-api';
 
 function getLanguageFromURL() {
   const regex = new RegExp('[\\?&]lang=([^&#]*)');
@@ -58,7 +58,6 @@ const configurationData = {
 
 const TVChartContainer: React.FC<any> = (props) => {
   const [widgetCom, setWidgetCom] = useState<IChartingLibraryWidget | null>();
-  const [isChartReady, setChartReady] = useState(true);
 
   const onReady = (callback: any) => {
     setTimeout(() => callback(configurationData));
@@ -143,7 +142,6 @@ const TVChartContainer: React.FC<any> = (props) => {
     setWidgetCom(tvWidget);
 
     tvWidget.onChartReady(() => {
-      setChartReady(true);
       tvWidget.chart().setResolution('1D', () => {});
       tvWidget.applyOverrides({ 'paneProperties.topMargin': 15 });
       tvWidget.headerReady().then(() => {
@@ -172,17 +170,11 @@ const TVChartContainer: React.FC<any> = (props) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (isChartReady) {
-      widgetCom?.chart().setResolution('1D', () => {});
-    }
-  }, [isChartReady]);
-
   return (
     <>
       <header className={styles.VersionHeader}></header>
       <div
-        style={{ height: '400px', width: 800 }}
+        style={{ height: '700px', width: '1200px' }}
         id={props.container_id}
         className={styles.TVChartContainer}
       />
